@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GPA Prediction App</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --secondary: #e0e7ff;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --dark: #1f2937;
+            --light: #f9fafb;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+
+        header {
+            background: linear-gradient(to right, var(--primary), var(--primary-dark));
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        .form-container {
+            padding: 2rem;
+        }
+
+        .form-section {
+            margin-bottom: 2rem;
+        }
+
+        .form-title {
+            font-size: 1.25rem;
+            color: var(--dark);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-title i {
+            color: var(--primary);
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            font-weight: 500;
+            color: var(--dark);
+        }
+
+        .range-container {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        input[type="range"] {
+            flex-grow: 1;
+            height: 5px;
+            background: var(--secondary);
+            outline: none;
+            border-radius: 5px;
+            appearance: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            appearance: none;
+            width: 18px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.2);
+        }
+
+        .range-value {
+            min-width: 3rem;
+            padding: 0.25rem 0.5rem;
+            background: var(--primary);
+            color: white;
+            border-radius: 0.25rem;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        select {
+            width: 100%;
+            padding: 0.75rem;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.5rem;
+            background-color: white;
+            font-size: 1rem;
+            color: var(--dark);
+            cursor: pointer;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+        }
+
+        button {
+            display: block;
+            width: 100%;
+            padding: 1rem;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: 0.5rem;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-top: 1rem;
+        }
+
+        button:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
+        }
+
+        .results {
+            padding: 2rem;
+            background-color: var(--light);
+            border-top: 1px solid #e2e8f0;
+            display: none;
+        }
+
+        .results.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .result-header {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--dark);
+            text-align: center;
+        }
+
+        .gpa-display {
+            font-size: 3rem;
+            font-weight: bold;
+            text-align: center;
+            margin: 1rem 0;
+            color: var(--primary);
+        }
+
+        .message {
+            text-align: center;
+            padding: 1rem;
+            border-radius: 0.5rem;
+            font-weight: 500;
+            margin-top: 1rem;
+        }
+
+        .message.success {
+            background-color: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+        }
+
+        .message.warning {
+            background-color: rgba(245, 158, 11, 0.1);
+            color: var(--warning);
+        }
+
+        .message.danger {
+            background-color: rgba(239, 68, 68, 0.1);
+            color: var(--danger);
+        }
+
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #64748b;
+            font-size: 0.875rem;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                border-radius: 0.5rem;
+            }
+            
+            header {
+                padding: 1.5rem;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .form-container, .results {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>GPA Prediction App</h1>
+            <p class="subtitle">Predict your final GPA using machine learning</p>
+        </header>
+        
+        <div class="form-container">
+            <form id="prediction-form">
+                <div class="form-section">
+                    <h3 class="form-title"><i class="fas fa-graduation-cap"></i> Academic Information</h3>
+                    
+                    <div class="form-group">
+                        <label for="G1">First Semester GPA (0.0-5.0)</label>
+                        <div class="range-container">
+                            <input type="range" id="G1" name="G1" min="0" max="5" step="0.25" value="3.75">
+                            <span class="range-value" id="G1-value">3.75</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="G2">Second Semester GPA (0.0-5.0)</label>
+                        <div class="range-container">
+                            <input type="range" id="G2" name="G2" min="0" max="5" step="0.25" value="3.75">
+                            <span class="range-value" id="G2-value">3.75</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="failures">Number of Past Failures (0-4)</label>
+                        <div class="range-container">
+                            <input type="range" id="failures" name="failures" min="0" max="4" step="1" value="0">
+                            <span class="range-value" id="failures-value">0</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="form-title"><i class="fas fa-clock"></i> Time Management</h3>
+                    
+                    <div class="form-group">
+                        <label for="studytime">Weekly Study Time</label>
+                        <select id="studytime" name="studytime">
+                            <option value="1">Less than 2 hours</option>
+                            <option value="2">2 to 5 hours</option>
+                            <option value="3" selected>5 to 10 hours</option>
+                            <option value="4">More than 10 hours</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="absences">Number of Absences</label>
+                        <div class="range-container">
+                            <input type="range" id="absences" name="absences" min="0" max="30" step="1" value="5">
+                            <span class="range-value" id="absences-value">5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="form-section">
+                    <h3 class="form-title"><i class="fas fa-balance-scale"></i> Lifestyle Balance</h3>
+                    
+                    <div class="form-group">
+                        <label for="freetime">Free Time After School (1-5)</label>
+                        <div class="range-container">
+                            <input type="range" id="freetime" name="freetime" min="1" max="5" step="1" value="3">
+                            <span class="range-value" id="freetime-value">3</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="goout">Going Out With Friends (1-5)</label>
+                        <div class="range-container">
+                            <input type="range" id="goout" name="goout" min="1" max="5" step="1" value="1">
+                            <span class="range-value" id="goout-value">1</span>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="health">Current Health Status (1-5)</label>
+                        <div class="range-container">
+                            <input type="range" id="health" name="health" min="1" max="5" step="1" value="5">
+                            <span class="range-value" id="health-value">5</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <button type="submit" id="predict-button">
+                    <i class="fas fa-calculator"></i> Predict GPA
+                </button>
+            </form>
+        </div>
+        
+        <div class="results" id="results-section">
+            <h3 class="result-header">Your Predicted Final GPA</h3>
+            <div class="gpa-display" id="predicted-gpa">0.00</div>
+            <div class="message" id="gpa-message"></div>
+        </div>
+    </div>
+    
+    <p class="footer">Powered by Machine Learning • Developed with ❤️</p>
+
+    <script>
+        // Update range value displays
+        document.querySelectorAll('input[type="range"]').forEach(input => {
+            const valueDisplay = document.getElementById(`${input.id}-value`);
+            
+            input.addEventListener('input', () => {
+                valueDisplay.textContent = input.value;
+            });
+        });
+        
+        // Form submission
+        document.getElementById('prediction-form').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const data = {};
+            
+            // Convert to correct types
+            data.G1 = parseFloat(formData.get('G1'));
+            data.G2 = parseFloat(formData.get('G2'));
+            data.studytime = parseInt(formData.get('studytime'));
+            data.failures = parseInt(formData.get('failures'));
+            data.absences = parseInt(formData.get('absences'));
+            data.freetime = parseInt(formData.get('freetime'));
+            data.goout = parseInt(formData.get('goout'));
+            data.health = parseInt(formData.get('health'));
+            
+            console.log('Sending data:', data);
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const responseText = await response.text();
+                console.log('Response text:', responseText);
+                
+                if (!response.ok) {
+                    throw new Error(`Prediction failed: ${responseText}`);
+                }
+                
+                let result;
+                try {
+                    result = JSON.parse(responseText);
+                } catch (parseError) {
+                    throw new Error(`Failed to parse response: ${responseText}`);
+                }
+                
+                if (!result.predicted_gpa && result.predicted_gpa !== 0) {
+                    throw new Error(`Invalid response format: ${JSON.stringify(result)}`);
+                }
+                
+                displayResults(result.predicted_gpa);
+                
+            } catch (error) {
+                console.error('Error:', error);
+                alert(`Error: ${error.message}`);
+            }
+        });
+        
+        function displayResults(gpa) {
+            const resultsSection = document.getElementById('results-section');
+            const predictedGPA = document.getElementById('predicted-gpa');
+            const gpaMessage = document.getElementById('gpa-message');
+            
+            predictedGPA.textContent = gpa.toFixed(2);
+            
+            // Add appropriate message based on GPA
+            if (gpa >= 3.5) {
+                gpaMessage.className = 'message success';
+                gpaMessage.innerHTML = '<i class="fas fa-trophy"></i> Great! You have a high GPA.';
+            } else if (gpa >= 2.5) {
+                gpaMessage.className = 'message warning';
+                gpaMessage.innerHTML = '<i class="fas fa-exclamation-triangle"></i> You\'re doing okay, but you can improve!';
+            } else {
+                gpaMessage.className = 'message danger';
+                gpaMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> It looks like you need to focus on improving your GPA.';
+            }
+            
+            // Show results section with animation
+            resultsSection.classList.add('active');
+            
+            // Scroll to results
+            resultsSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    </script>
+</body>
+</html>
