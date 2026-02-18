@@ -3,94 +3,394 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>GPA Prediction App</title>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <title>Degree GPA Predictor • AI-Powered Academic Success</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --primary: #6366f1;
-            --primary-dark: #4f46e5;
-            --secondary: #e0e7ff;
+            /* Primary Colors */
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --primary: #667eea;
+            --primary-dark: #5568d3;
+            --accent: #f093fb;
+            --accent-gradient: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            
+            /* Status Colors */
             --success: #10b981;
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
             --warning: #f59e0b;
+            --warning-gradient: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
             --danger: #ef4444;
-            --dark: #1f2937;
-            --light: #f9fafb;
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            
+            /* Light Mode */
+            --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --bg-color: #f0f4f8;
+            --card-bg: rgba(255, 255, 255, 0.85);
+            --card-border: rgba(255, 255, 255, 0.3);
+            --text-primary: #1f2937;
+            --text-secondary: #6b7280;
+            --text-muted: #9ca3af;
+            --shadow: 0 8px 32px rgba(31, 38, 135, 0.15);
+            --shadow-hover: 0 12px 40px rgba(31, 38, 135, 0.25);
+            
+            /* Form Elements */
+            --input-bg: rgba(255, 255, 255, 0.9);
+            --input-border: rgba(102, 126, 234, 0.2);
+            --input-focus: rgba(102, 126, 234, 0.4);
+            --slider-track: #e5e7eb;
+            --slider-fill: linear-gradient(90deg, #667eea 0%, #764ba2 100%);
+        }
+
+        [data-theme="dark"] {
+            /* Dark Mode */
+            --bg-gradient: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%);
+            --bg-color: #0f0c29;
+            --card-bg: rgba(30, 30, 50, 0.85);
+            --card-border: rgba(255, 255, 255, 0.1);
+            --text-primary: #f9fafb;
+            --text-secondary: #d1d5db;
+            --text-muted: #9ca3af;
+            --shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+            --shadow-hover: 0 12px 40px rgba(0, 0, 0, 0.5);
+            
+            --input-bg: rgba(40, 40, 60, 0.9);
+            --input-border: rgba(102, 126, 234, 0.3);
+            --input-focus: rgba(102, 126, 234, 0.6);
+            --slider-track: #374151;
         }
 
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: var(--bg-gradient);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
             min-height: 100vh;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            padding: 2rem 1rem;
+            color: var(--text-primary);
+            overflow-x: hidden;
         }
 
-        .container {
-            max-width: 800px;
+        @keyframes gradientShift {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+            height: 100%;
+            pointer-events: none;
             overflow: hidden;
+            z-index: 0;
         }
 
+        .particle {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 20s infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100vh) rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* Header */
         header {
-            background: linear-gradient(to right, var(--primary), var(--primary-dark));
-            color: white;
-            padding: 2rem;
-            text-align: center;
-        }
-
-        h1 {
-            font-size: 2rem;
-            margin-bottom: 0.5rem;
-        }
-
-        .subtitle {
-            font-size: 1rem;
-            opacity: 0.8;
-        }
-
-        .form-container {
-            padding: 2rem;
-        }
-
-        .form-section {
-            margin-bottom: 2rem;
-        }
-
-        .form-title {
-            font-size: 1.25rem;
-            color: var(--dark);
-            margin-bottom: 1rem;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 1000;
+            padding: 1rem 2rem;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
             display: flex;
+            justify-content: space-between;
+            align-items: center;
+            animation: slideDown 0.6s ease-out;
+        }
+
+        [data-theme="dark"] header {
+            background: rgba(15, 12, 41, 0.8);
+        }
+
+        @keyframes slideDown {
+            from {
+                transform: translateY(-100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            color: var(--text-primary);
+            text-decoration: none;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.05);
+        }
+
+        .logo-icon {
+            width: 45px;
+            height: 45px;
+            background: var(--primary-gradient);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .logo-text {
+            font-size: 1.5rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .header-controls {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .theme-toggle:hover {
+            transform: rotate(180deg);
+            box-shadow: var(--shadow-hover);
+        }
+
+        .theme-toggle i {
+            font-size: 1.25rem;
+            color: var(--text-primary);
+            transition: all 0.3s ease;
+        }
+
+        /* Main Container */
+        .main-container {
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 8rem 1.5rem 3rem;
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Hero Section */
+        .hero {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeInUp 0.8s ease-out;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: clamp(2rem, 5vw, 3rem);
+            font-weight: 800;
+            margin-bottom: 1rem;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1.2;
+        }
+
+        .hero p {
+            font-size: 1.125rem;
+            color: #374151;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        [data-theme="dark"] .hero p {
+            color: var(--text-secondary);
+        }
+
+        .hero-badge {
+            display: inline-flex;
             align-items: center;
             gap: 0.5rem;
+            padding: 0.5rem 1rem;
+            background: var(--card-bg);
+            border: 1px solid var(--card-border);
+            border-radius: 50px;
+            margin-bottom: 1.5rem;
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            animation: pulse 2s infinite;
         }
 
-        .form-title i {
-            color: var(--primary);
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(102, 126, 234, 0); }
         }
 
+        .hero-badge i {
+            color: var(--success);
+        }
+
+        .hero-badge span {
+            font-size: 0.875rem;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        /* Glass Card */
+        .glass-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            animation: fadeInUp 0.8s ease-out 0.2s backwards;
+        }
+
+        .glass-card:hover {
+            box-shadow: var(--shadow-hover);
+            transition: box-shadow 0.3s ease;
+        }
+
+        /* Form Container */
+        .form-container {
+            padding: 2.5rem;
+        }
+
+        /* Form Sections */
+        .form-section {
+            margin-bottom: 2rem;
+            animation: fadeInUp 0.6s ease-out backwards;
+        }
+
+        .form-section:nth-child(1) { animation-delay: 0.3s; }
+        .form-section:nth-child(2) { animation-delay: 0.4s; }
+        .form-section:nth-child(3) { animation-delay: 0.5s; }
+
+        .section-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.75rem;
+            border-bottom: 2px solid var(--input-border);
+        }
+
+        .section-icon {
+            width: 40px;
+            height: 40px;
+            background: var(--primary-gradient);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        /* Form Groups */
         .form-group {
             margin-bottom: 1.5rem;
         }
 
-        label {
-            display: block;
-            margin-bottom: 0.5rem;
-            font-weight: 500;
-            color: var(--dark);
+        .form-group:last-child {
+            margin-bottom: 0;
         }
 
+        .label-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        label {
+            font-weight: 500;
+            color: var(--text-primary);
+            font-size: 0.95rem;
+        }
+
+        .label-hint {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        /* Range Sliders */
         .range-container {
             display: flex;
             align-items: center;
@@ -99,272 +399,900 @@
 
         input[type="range"] {
             flex-grow: 1;
-            height: 5px;
-            background: var(--secondary);
-            outline: none;
-            border-radius: 5px;
+            height: 8px;
+            background: var(--slider-track);
+            border-radius: 10px;
             appearance: none;
+            outline: none;
+            cursor: pointer;
+            position: relative;
+            transition: background 0.3s ease;
         }
 
         input[type="range"]::-webkit-slider-thumb {
             appearance: none;
-            width: 18px;
-            height: 18px;
-            background: var(--primary);
+            width: 24px;
+            height: 24px;
+            background: var(--primary-gradient);
             border-radius: 50%;
             cursor: pointer;
-            transition: all 0.3s;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
         }
 
         input[type="range"]::-webkit-slider-thumb:hover {
             transform: scale(1.2);
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.6);
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 24px;
+            height: 24px;
+            background: var(--primary-gradient);
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 2px 10px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        input[type="range"]::-moz-range-thumb:hover {
+            transform: scale(1.2);
         }
 
         .range-value {
-            min-width: 3rem;
-            padding: 0.25rem 0.5rem;
-            background: var(--primary);
+            min-width: 60px;
+            padding: 0.5rem 0.75rem;
+            background: var(--primary-gradient);
             color: white;
-            border-radius: 0.25rem;
+            border-radius: 10px;
             text-align: center;
-            font-weight: bold;
+            font-weight: 700;
+            font-size: 1rem;
+            box-shadow: 0 4px 10px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s ease;
+        }
+
+        .range-value:hover {
+            transform: scale(1.1);
+        }
+
+        /* Select Dropdowns */
+        .select-wrapper {
+            position: relative;
         }
 
         select {
             width: 100%;
-            padding: 0.75rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 0.5rem;
-            background-color: white;
+            padding: 1rem 1.25rem;
+            padding-right: 3rem;
+            background: var(--input-bg);
+            border: 2px solid var(--input-border);
+            border-radius: 12px;
             font-size: 1rem;
-            color: var(--dark);
+            color: var(--text-primary);
             cursor: pointer;
             outline: none;
-            transition: border-color 0.3s;
+            transition: all 0.3s ease;
+            appearance: none;
+            -webkit-appearance: none;
         }
 
         select:focus {
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.3);
+            box-shadow: 0 0 0 4px var(--input-focus);
         }
 
-        button {
-            display: block;
-            width: 100%;
-            padding: 1rem;
-            background: var(--primary);
-            color: white;
-            border: none;
-            border-radius: 0.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-top: 1rem;
+        .select-wrapper::after {
+            content: '\f107';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1.25rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--text-muted);
+            pointer-events: none;
+            transition: transform 0.3s ease;
         }
 
-        button:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(99, 102, 241, 0.4);
-        }
-
-        .results {
-            padding: 2rem;
-            background-color: var(--light);
-            border-top: 1px solid #e2e8f0;
-            display: none;
-        }
-
-        .results.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .result-header {
-            font-size: 1.5rem;
-            margin-bottom: 1rem;
-            color: var(--dark);
-            text-align: center;
-        }
-
-        .gpa-display {
-            font-size: 3rem;
-            font-weight: bold;
-            text-align: center;
-            margin: 1rem 0;
+        .select-wrapper:focus-within::after {
+            transform: translateY(-50%) rotate(180deg);
             color: var(--primary);
         }
 
-        .message {
-            text-align: center;
-            padding: 1rem;
-            border-radius: 0.5rem;
-            font-weight: 500;
-            margin-top: 1rem;
+        /* Submit Button */
+        .submit-btn {
+            width: 100%;
+            padding: 1.25rem 2rem;
+            background: var(--primary-gradient);
+            color: white;
+            border: none;
+            border-radius: 16px;
+            font-size: 1.125rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.75rem;
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+            position: relative;
+            overflow: hidden;
         }
 
-        .message.success {
-            background-color: rgba(16, 185, 129, 0.1);
-            color: var(--success);
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s ease, height 0.6s ease;
         }
 
-        .message.warning {
-            background-color: rgba(245, 158, 11, 0.1);
-            color: var(--warning);
+        .submit-btn:hover::before {
+            width: 300px;
+            height: 300px;
         }
 
-        .message.danger {
-            background-color: rgba(239, 68, 68, 0.1);
-            color: var(--danger);
+        .submit-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 35px rgba(102, 126, 234, 0.5);
         }
 
-        .footer {
-            text-align: center;
+        .submit-btn:active {
+            transform: translateY(-1px);
+        }
+
+        .submit-btn i {
+            font-size: 1.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .submit-btn:hover i {
+            transform: scale(1.2);
+        }
+
+        .submit-btn.loading {
+            pointer-events: none;
+        }
+
+        .submit-btn.loading .btn-text {
+            opacity: 0;
+        }
+
+        .submit-btn.loading .btn-spinner {
+            opacity: 1;
+        }
+
+        .btn-spinner {
+            position: absolute;
+            width: 24px;
+            height: 24px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            opacity: 0;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Results Section */
+        .results-section {
+            display: none;
+            padding: 2.5rem;
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--card-border);
+            border-radius: 24px;
+            box-shadow: var(--shadow);
             margin-top: 2rem;
-            color: #64748b;
+            animation: fadeInUp 0.6s ease-out;
+        }
+
+        .results-section.active {
+            display: block;
+        }
+
+        .results-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .results-header h2 {
+            font-size: 1.75rem;
+            font-weight: 700;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+
+        .results-header p {
+            color: var(--text-secondary);
+            font-size: 1rem;
+        }
+
+        /* GPA Display */
+        .gpa-display {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .gpa-circle {
+            position: relative;
+            width: 200px;
+            height: 200px;
+            margin-bottom: 1.5rem;
+        }
+
+        .gpa-circle svg {
+            transform: rotate(-90deg);
+        }
+
+        .gpa-circle-bg {
+            fill: none;
+            stroke: var(--slider-track);
+            stroke-width: 12;
+        }
+
+        .gpa-circle-progress {
+            fill: none;
+            stroke: url(#gpaGradient);
+            stroke-width: 12;
+            stroke-linecap: round;
+            stroke-dasharray: 565.48;
+            stroke-dashoffset: 565.48;
+            transition: stroke-dashoffset 1.5s ease-out;
+        }
+
+        .gpa-value {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .gpa-number {
+            font-size: 3.5rem;
+            font-weight: 800;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            line-height: 1;
+        }
+
+        .gpa-label {
+            font-size: 0.875rem;
+            color: var(--text-secondary);
+            margin-top: 0.25rem;
+        }
+
+        .grade-badge {
+            padding: 0.5rem 1.5rem;
+            border-radius: 50px;
+            font-weight: 700;
+            font-size: 1.25rem;
+            color: white;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+            animation: bounceIn 0.6s ease-out 0.3s backwards;
+        }
+
+        .grade-badge.a { background: var(--success-gradient); }
+        .grade-badge.b { background: var(--warning-gradient); }
+        .grade-badge.c { background: var(--danger-gradient); }
+
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: scale(1.1);
+            }
+            70% {
+                transform: scale(0.9);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Message Card */
+        .message-card {
+            padding: 1.5rem;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+            animation: slideInLeft 0.6s ease-out 0.4s backwards;
+        }
+
+        @keyframes slideInLeft {
+            from {
+                opacity: 0;
+                transform: translateX(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .message-card.success {
+            background: rgba(16, 185, 129, 0.1);
+            border: 2px solid rgba(16, 185, 129, 0.3);
+        }
+
+        .message-card.warning {
+            background: rgba(245, 158, 11, 0.1);
+            border: 2px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .message-card.danger {
+            background: rgba(239, 68, 68, 0.1);
+            border: 2px solid rgba(239, 68, 68, 0.3);
+        }
+
+        .message-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            flex-shrink: 0;
+        }
+
+        .message-card.success .message-icon {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .message-card.warning .message-icon {
+            background: var(--warning-gradient);
+            color: white;
+        }
+
+        .message-card.danger .message-icon {
+            background: var(--danger-gradient);
+            color: white;
+        }
+
+        .message-content h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .message-content p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.5;
+        }
+
+        /* Tips Section */
+        .tips-section {
+            background: var(--input-bg);
+            border-radius: 16px;
+            padding: 1.5rem;
+            animation: fadeInUp 0.6s ease-out 0.5s backwards;
+        }
+
+        .tips-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 1rem;
+        }
+
+        .tips-header i {
+            color: var(--accent);
+            font-size: 1.25rem;
+        }
+
+        .tips-header h3 {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+
+        .tips-list {
+            list-style: none;
+        }
+
+        .tips-list li {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid var(--input-border);
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.5;
+        }
+
+        .tips-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .tips-list li i {
+            color: var(--primary);
+            margin-top: 0.25rem;
+            flex-shrink: 0;
+        }
+
+        /* Footer */
+        footer {
+            text-align: center;
+            padding: 2rem 1.5rem;
+            color: var(--text-muted);
             font-size: 0.875rem;
         }
 
+        footer a {
+            color: var(--primary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        footer a:hover {
+            color: var(--accent);
+        }
+
+        /* Confetti */
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            pointer-events: none;
+            z-index: 9999;
+        }
+
+        /* Responsive Design */
         @media (max-width: 768px) {
-            .container {
-                border-radius: 0.5rem;
-            }
-            
             header {
+                padding: 0.75rem 1rem;
+            }
+
+            .logo-text {
+                font-size: 1.125rem;
+            }
+
+            .main-container {
+                padding: 6rem 1rem 2rem;
+            }
+
+            .hero h1 {
+                font-size: 1.75rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .glass-card,
+            .results-section {
+                border-radius: 20px;
+            }
+
+            .form-container,
+            .results-section {
                 padding: 1.5rem;
             }
-            
-            h1 {
-                font-size: 1.5rem;
+
+            .gpa-circle {
+                width: 160px;
+                height: 160px;
             }
-            
-            .form-container, .results {
-                padding: 1rem;
+
+            .gpa-number {
+                font-size: 2.5rem;
             }
+
+            .grade-badge {
+                font-size: 1rem;
+                padding: 0.4rem 1rem;
+            }
+
+            .message-card {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .message-icon {
+                width: 60px;
+                height: 60px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .logo-icon {
+                width: 38px;
+                height: 38px;
+                font-size: 1.25rem;
+            }
+
+            .theme-toggle {
+                width: 42px;
+                height: 42px;
+            }
+
+            .section-header {
+                flex-wrap: wrap;
+            }
+
+            .range-container {
+                flex-wrap: wrap;
+            }
+
+            .range-value {
+                width: 100%;
+                min-width: auto;
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            header,
+            .theme-toggle,
+            .submit-btn,
+            .particles {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .glass-card,
+            .results-section {
+                box-shadow: none;
+                border: 1px solid #e5e7eb;
+            }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 10px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-color);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--primary-gradient);
+            border-radius: 5px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--primary-dark);
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>GPA Prediction App</h1>
-            <p class="subtitle">Predict your final GPA using machine learning</p>
-        </header>
-        
-        <div class="form-container">
-            <form id="prediction-form">
-                <div class="form-section">
-                    <h3 class="form-title"><i class="fas fa-graduation-cap"></i> Academic Information</h3>
-                    
-                    <div class="form-group">
-                        <label for="G1">First Semester GPA (0.0-5.0)</label>
-                        <div class="range-container">
-                            <input type="range" id="G1" name="G1" min="0" max="5" step="0.25" value="3.75">
-                            <span class="range-value" id="G1-value">3.75</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="G2">Second Semester GPA (0.0-5.0)</label>
-                        <div class="range-container">
-                            <input type="range" id="G2" name="G2" min="0" max="5" step="0.25" value="3.75">
-                            <span class="range-value" id="G2-value">3.75</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="failures">Number of Past Failures (0-4)</label>
-                        <div class="range-container">
-                            <input type="range" id="failures" name="failures" min="0" max="4" step="1" value="0">
-                            <span class="range-value" id="failures-value">0</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="form-title"><i class="fas fa-clock"></i> Time Management</h3>
-                    
-                    <div class="form-group">
-                        <label for="studytime">Weekly Study Time</label>
-                        <select id="studytime" name="studytime">
-                            <option value="1">Less than 2 hours</option>
-                            <option value="2">2 to 5 hours</option>
-                            <option value="3" selected>5 to 10 hours</option>
-                            <option value="4">More than 10 hours</option>
-                        </select>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="absences">Number of Absences</label>
-                        <div class="range-container">
-                            <input type="range" id="absences" name="absences" min="0" max="30" step="1" value="5">
-                            <span class="range-value" id="absences-value">5</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="form-section">
-                    <h3 class="form-title"><i class="fas fa-balance-scale"></i> Lifestyle Balance</h3>
-                    
-                    <div class="form-group">
-                        <label for="freetime">Free Time After School (1-5)</label>
-                        <div class="range-container">
-                            <input type="range" id="freetime" name="freetime" min="1" max="5" step="1" value="3">
-                            <span class="range-value" id="freetime-value">3</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="goout">Going Out With Friends (1-5)</label>
-                        <div class="range-container">
-                            <input type="range" id="goout" name="goout" min="1" max="5" step="1" value="1">
-                            <span class="range-value" id="goout-value">1</span>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="health">Current Health Status (1-5)</label>
-                        <div class="range-container">
-                            <input type="range" id="health" name="health" min="1" max="5" step="1" value="5">
-                            <span class="range-value" id="health-value">5</span>
-                        </div>
-                    </div>
-                </div>
-                
-                <button type="submit" id="predict-button">
-                    <i class="fas fa-calculator"></i> Predict GPA
-                </button>
-            </form>
+    <!-- Floating Particles -->
+    <div class="particles" id="particles"></div>
+
+    <!-- Header -->
+    <header>
+        <a href="#" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-graduation-cap"></i>
+            </div>
+            <span class="logo-text">GPA Predictor</span>
+        </a>
+        <div class="header-controls">
+            <button class="theme-toggle" id="theme-toggle" aria-label="Toggle dark mode">
+                <i class="fas fa-moon"></i>
+            </button>
         </div>
-        
-        <div class="results" id="results-section">
-            <h3 class="result-header">Your Predicted Final GPA</h3>
-            <div class="gpa-display" id="predicted-gpa">0.00</div>
-            <div class="message" id="gpa-message"></div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="main-container">
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">
+                <i class="fas fa-sparkles"></i>
+                <span>AI-Powered Academic Success</span>
+            </div>
+            <h1>Predict Your Degree GPA with Confidence</h1>
+            <p>Enter your academic details and lifestyle factors to get an accurate prediction of your final GPA using advanced machine learning.</p>
+        </section>
+
+        <!-- Form Card -->
+        <div class="glass-card">
+            <div class="form-container">
+                <form id="prediction-form">
+                    <!-- Academic Information Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-book-open"></i>
+                            </div>
+                            <h2 class="section-title">Academic Information</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="G1">First Semester GPA</label>
+                                <span class="label-hint">Scale: 0.0 - 5.0</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="G1" name="G1" min="0" max="5" step="0.25" value="3.75">
+                                <span class="range-value" id="G1-value">3.75</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="G2">Second Semester GPA</label>
+                                <span class="label-hint">Scale: 0.0 - 5.0</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="G2" name="G2" min="0" max="5" step="0.25" value="3.75">
+                                <span class="range-value" id="G2-value">3.75</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="failures">Number of Past Failures</label>
+                                <span class="label-hint">Range: 0 - 4</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="failures" name="failures" min="0" max="4" step="1" value="0">
+                                <span class="range-value" id="failures-value">0</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Time Management Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-clock"></i>
+                            </div>
+                            <h2 class="section-title">Time Management</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="studytime">Weekly Study Time</label>
+                            </div>
+                            <div class="select-wrapper">
+                                <select id="studytime" name="studytime">
+                                    <option value="1">Less than 2 hours per week</option>
+                                    <option value="2">2 to 5 hours per week</option>
+                                    <option value="3" selected>5 to 10 hours per week</option>
+                                    <option value="4">More than 10 hours per week</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="absences">Number of Absences</label>
+                                <span class="label-hint">Range: 0 - 30</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="absences" name="absences" min="0" max="30" step="1" value="5">
+                                <span class="range-value" id="absences-value">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lifestyle Balance Section -->
+                    <div class="form-section">
+                        <div class="section-header">
+                            <div class="section-icon">
+                                <i class="fas fa-heart"></i>
+                            </div>
+                            <h2 class="section-title">Lifestyle Balance</h2>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="freetime">Free Time After School</label>
+                                <span class="label-hint">Scale: 1 (Very low) - 5 (Very high)</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="freetime" name="freetime" min="1" max="5" step="1" value="3">
+                                <span class="range-value" id="freetime-value">3</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="goout">Going Out With Friends</label>
+                                <span class="label-hint">Scale: 1 (Very low) - 5 (Very high)</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="goout" name="goout" min="1" max="5" step="1" value="1">
+                                <span class="range-value" id="goout-value">1</span>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="label-container">
+                                <label for="health">Current Health Status</label>
+                                <span class="label-hint">Scale: 1 (Very bad) - 5 (Very good)</span>
+                            </div>
+                            <div class="range-container">
+                                <input type="range" id="health" name="health" min="1" max="5" step="1" value="5">
+                                <span class="range-value" id="health-value">5</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Submit Button -->
+                    <button type="submit" class="submit-btn" id="predict-button">
+                        <span class="btn-text">
+                            <i class="fas fa-magic"></i>
+                            Predict My GPA
+                        </span>
+                        <div class="btn-spinner"></div>
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
-    
-    <p class="footer">Powered by Machine Learning • Developed with ❤️</p>
+
+        <!-- Results Section -->
+        <div class="results-section" id="results-section">
+            <div class="results-header">
+                <h2>Your Predicted GPA</h2>
+                <p>Based on your academic performance and lifestyle factors</p>
+            </div>
+
+            <!-- GPA Circle Display -->
+            <div class="gpa-display">
+                <div class="gpa-circle">
+                    <svg width="200" height="200" viewBox="0 0 200 200">
+                        <defs>
+                            <linearGradient id="gpaGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea"/>
+                                <stop offset="100%" style="stop-color:#764ba2"/>
+                            </linearGradient>
+                        </defs>
+                        <circle class="gpa-circle-bg" cx="100" cy="100" r="90"/>
+                        <circle class="gpa-circle-progress" id="gpa-progress" cx="100" cy="100" r="90"/>
+                    </svg>
+                    <div class="gpa-value">
+                        <div class="gpa-number" id="predicted-gpa">0.00</div>
+                        <div class="gpa-label">out of 5.0</div>
+                    </div>
+                </div>
+                <div class="grade-badge" id="grade-badge">A</div>
+            </div>
+
+            <!-- Message Card -->
+            <div class="message-card" id="message-card">
+                <div class="message-icon">
+                    <i class="fas fa-trophy" id="message-icon"></i>
+                </div>
+                <div class="message-content">
+                    <h3 id="message-title">Excellent Work!</h3>
+                    <p id="message-text">Your GPA indicates outstanding academic performance. Keep up the great work!</p>
+                </div>
+            </div>
+
+            <!-- Tips Section -->
+            <div class="tips-section">
+                <div class="tips-header">
+                    <i class="fas fa-lightbulb"></i>
+                    <h3>Personalized Recommendations</h3>
+                </div>
+                <ul class="tips-list" id="tips-list">
+                    <li><i class="fas fa-check-circle"></i> Maintain your current study schedule</li>
+                    <li><i class="fas fa-check-circle"></i> Continue balancing academics with personal time</li>
+                    <li><i class="fas fa-check-circle"></i> Your health habits are contributing positively</li>
+                </ul>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <p>Powered by <a href="#">Machine Learning</a> • Developed with <i class="fas fa-heart" style="color: var(--accent);"></i> for Academic Success</p>
+    </footer>
 
     <script>
+        // Create floating particles
+        function createParticles() {
+            const particlesContainer = document.getElementById('particles');
+            const particleCount = 20;
+
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.animationDelay = Math.random() * 20 + 's';
+                particle.style.animationDuration = (Math.random() * 10 + 15) + 's';
+                particle.style.width = (Math.random() * 10 + 5) + 'px';
+                particle.style.height = particle.style.width;
+                particlesContainer.appendChild(particle);
+            }
+        }
+
+        createParticles();
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIcon = themeToggle.querySelector('i');
+        const html = document.documentElement;
+
+        // Check for saved theme preference or default to light
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        html.setAttribute('data-theme', savedTheme);
+        updateThemeIcon(savedTheme);
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = html.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                themeIcon.className = 'fas fa-sun';
+            } else {
+                themeIcon.className = 'fas fa-moon';
+            }
+        }
+
         // Update range value displays
         document.querySelectorAll('input[type="range"]').forEach(input => {
             const valueDisplay = document.getElementById(`${input.id}-value`);
             
+            // Initialize display
+            valueDisplay.textContent = input.value;
+            
             input.addEventListener('input', () => {
                 valueDisplay.textContent = input.value;
+                
+                // Add subtle animation to value display
+                valueDisplay.style.transform = 'scale(1.1)';
+                setTimeout(() => {
+                    valueDisplay.style.transform = 'scale(1)';
+                }, 150);
             });
         });
-        
+
         // Form submission
         document.getElementById('prediction-form').addEventListener('submit', async (e) => {
             e.preventDefault();
+            
+            const submitBtn = document.getElementById('predict-button');
+            const resultsSection = document.getElementById('results-section');
+            
+            // Show loading state
+            submitBtn.classList.add('loading');
             
             const formData = new FormData(e.target);
             const data = {};
@@ -413,34 +1341,219 @@
             } catch (error) {
                 console.error('Error:', error);
                 alert(`Error: ${error.message}`);
+            } finally {
+                // Remove loading state
+                submitBtn.classList.remove('loading');
             }
         });
-        
+
         function displayResults(gpa) {
             const resultsSection = document.getElementById('results-section');
             const predictedGPA = document.getElementById('predicted-gpa');
-            const gpaMessage = document.getElementById('gpa-message');
+            const gpaProgress = document.getElementById('gpa-progress');
+            const gradeBadge = document.getElementById('grade-badge');
+            const messageCard = document.getElementById('message-card');
+            const messageIcon = document.getElementById('message-icon');
+            const messageTitle = document.getElementById('message-title');
+            const messageText = document.getElementById('message-text');
+            const tipsList = document.getElementById('tips-list');
             
-            predictedGPA.textContent = gpa.toFixed(2);
+            // Animate GPA number
+            animateNumber(predictedGPA, 0, gpa, 1500);
             
-            // Add appropriate message based on GPA
-            if (gpa >= 3.5) {
-                gpaMessage.className = 'message success';
-                gpaMessage.innerHTML = '<i class="fas fa-trophy"></i> Great! You have a high GPA.';
+            // Calculate progress circle
+            const progress = (gpa / 5) * 565.48;
+            const offset = 565.48 - progress;
+            
+            setTimeout(() => {
+                gpaProgress.style.strokeDashoffset = offset;
+            }, 100);
+            
+            // Determine grade and styling
+            let grade, messageClass, iconClass, title, text;
+            let tips = [];
+            
+            if (gpa >= 4.0) {
+                grade = 'A+';
+                messageClass = 'success';
+                iconClass = 'fas fa-trophy';
+                title = 'Outstanding Performance!';
+                text = 'Your GPA indicates exceptional academic achievement. You\'re on track for excellence!';
+                tips = [
+                    'Continue your excellent study habits',
+                    'Consider mentoring others to reinforce your knowledge',
+                    'Maintain your healthy work-life balance',
+                    'You\'re ready for advanced challenges'
+                ];
+                createConfetti();
+            } else if (gpa >= 3.5) {
+                grade = 'A';
+                messageClass = 'success';
+                iconClass = 'fas fa-star';
+                title = 'Excellent Work!';
+                text = 'Your GPA shows strong academic performance. Keep up the great momentum!';
+                tips = [
+                    'Maintain your current study schedule',
+                    'Continue balancing academics with personal time',
+                    'Your health habits are contributing positively',
+                    'Stay consistent with your routines'
+                ];
+                createConfetti();
+            } else if (gpa >= 3.0) {
+                grade = 'B+';
+                messageClass = 'success';
+                iconClass = 'fas fa-thumbs-up';
+                title = 'Good Progress!';
+                text = 'You\'re performing well above average. Small improvements could lead to even better results.';
+                tips = [
+                    'Increase study time by 1-2 hours per week',
+                    'Review past exam papers to identify weak areas',
+                    'Consider forming study groups',
+                    'Keep track of your daily progress'
+                ];
             } else if (gpa >= 2.5) {
-                gpaMessage.className = 'message warning';
-                gpaMessage.innerHTML = '<i class="fas fa-exclamation-triangle"></i> You\'re doing okay, but you can improve!';
+                grade = 'B';
+                messageClass = 'warning';
+                iconClass = 'fas fa-chart-line';
+                title = 'Room for Improvement';
+                text = 'You\'re doing okay, but there\'s definitely room for growth. Focus on consistency.';
+                tips = [
+                    'Create a structured study schedule',
+                    'Reduce absences and attend all classes',
+                    'Seek help from teachers or tutors',
+                    'Set specific, achievable goals'
+                ];
+            } else if (gpa >= 2.0) {
+                grade = 'C';
+                messageClass = 'warning';
+                iconClass = 'fas fa-exclamation-triangle';
+                title = 'Needs Attention';
+                text = 'Your GPA indicates you need to focus more on your studies. Don\'t worry, improvement is possible!';
+                tips = [
+                    'Increase study time significantly',
+                    'Attend all classes and minimize absences',
+                    'Review fundamentals and seek extra help',
+                    'Create a daily study routine'
+                ];
             } else {
-                gpaMessage.className = 'message danger';
-                gpaMessage.innerHTML = '<i class="fas fa-exclamation-circle"></i> It looks like you need to focus on improving your GPA.';
+                grade = 'D';
+                messageClass = 'danger';
+                iconClass = 'fas fa-exclamation-circle';
+                title = 'Immediate Action Required';
+                text = 'Your GPA needs significant improvement. Let\'s work together to turn things around.';
+                tips = [
+                    'Seek academic counseling immediately',
+                    'Dramatically increase study time',
+                    'Consider a study skills workshop',
+                    'Find a study partner or tutor'
+                ];
             }
             
-            // Show results section with animation
+            // Update grade badge
+            gradeBadge.textContent = grade;
+            gradeBadge.className = 'grade-badge ' + (grade.startsWith('A') ? 'a' : grade.startsWith('B') ? 'b' : 'c');
+            
+            // Update message card
+            messageCard.className = 'message-card ' + messageClass;
+            messageIcon.className = iconClass;
+            messageTitle.textContent = title;
+            messageText.textContent = text;
+            
+            // Update tips
+            tipsList.innerHTML = tips.map(tip => 
+                `<li><i class="fas fa-check-circle"></i> ${tip}</li>`
+            ).join('');
+            
+            // Show results section
             resultsSection.classList.add('active');
             
-            // Scroll to results
-            resultsSection.scrollIntoView({ behavior: 'smooth' });
+            // Smooth scroll to results
+            setTimeout(() => {
+                resultsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }, 300);
         }
+
+        // Animate number counting
+        function animateNumber(element, start, end, duration) {
+            const startTime = performance.now();
+            
+            function update(currentTime) {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                // Easing function for smooth animation
+                const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+                const current = start + (end - start) * easeOutQuart;
+                
+                element.textContent = current.toFixed(2);
+                
+                if (progress < 1) {
+                    requestAnimationFrame(update);
+                }
+            }
+            
+            requestAnimationFrame(update);
+        }
+
+        // Create confetti effect
+        function createConfetti() {
+            const colors = ['#667eea', '#764ba2', '#f093fb', '#10b981', '#f59e0b'];
+            const confettiCount = 100;
+            
+            for (let i = 0; i < confettiCount; i++) {
+                setTimeout(() => {
+                    const confetti = document.createElement('div');
+                    confetti.className = 'confetti';
+                    confetti.style.left = Math.random() * 100 + 'vw';
+                    confetti.style.top = '-10px';
+                    confetti.style.background = colors[Math.floor(Math.random() * colors.length)];
+                    confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                    confetti.style.width = (Math.random() * 10 + 5) + 'px';
+                    confetti.style.height = confetti.style.width;
+                    confetti.style.transform = `rotate(${Math.random() * 360}deg)`;
+                    
+                    document.body.appendChild(confetti);
+                    
+                    const animation = confetti.animate([
+                        { 
+                            transform: `translateY(0) rotate(0deg)`,
+                            opacity: 1
+                        },
+                        { 
+                            transform: `translateY(100vh) rotate(${Math.random() * 720}deg)`,
+                            opacity: 0
+                        }
+                    ], {
+                        duration: Math.random() * 2000 + 2000,
+                        easing: 'cubic-bezier(0.25, 0.46, 0.45, 0.94)'
+                    });
+                    
+                    animation.onfinish = () => confetti.remove();
+                }, i * 10);
+            }
+        }
+
+        // Add smooth reveal animations on scroll
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.form-section, .glass-card').forEach(el => {
+            el.style.opacity = '0';
+            el.style.transform = 'translateY(20px)';
+            el.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+            observer.observe(el);
+        });
     </script>
 </body>
 </html>
